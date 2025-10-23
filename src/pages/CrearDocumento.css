@@ -1,0 +1,121 @@
+/* =================================================================== */
+/* CSS PARA CREARDOCUMENTO.CSS (Versión Completa y Limpia)              */
+/* =================================================================== */
+
+/* === Styles for the Document Creation Form === */
+.form-create-document {
+    max-width: 700px;
+    margin: 0 auto 3rem auto; /* Centered horizontally with bottom margin */
+    padding: 2.5rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.form-create-document h1 { 
+    text-align: center; 
+    color: #1a253c; 
+    margin-top: 0; 
+    margin-bottom: 2rem; 
+}
+
+/* These generic classes can be reused across different forms */
+.form-group { 
+    margin-bottom: 1.5rem; 
+}
+
+.form-group label { 
+    display: block; 
+    margin-bottom: 0.5rem; 
+    font-weight: 600; 
+    color: #555; 
+}
+
+.form-group input, 
+.form-group select { 
+    width: 100%; 
+    padding: 12px 15px; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    font-size: 1rem; 
+}
+
+.submit-btn { 
+    width: 100%; 
+    padding: 15px; 
+    border: none; 
+    border-radius: 8px; 
+    background-color: #007bff; 
+    color: white; 
+    font-size: 1.1rem; 
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: background-color 0.2s;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+.submit-btn:disabled { 
+    background-color: #aaa; 
+    cursor: not-allowed; 
+}
+
+/* === Styles for the Document Table === */
+.tabla-container {
+    max-width: 1100px; /* Wider to accommodate the URL link */
+    margin: 3rem auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.tabla-container h2 { 
+    text-align: center; 
+    color: #1a253c; 
+    margin-top: 0; 
+    margin-bottom: 2rem; 
+}
+
+.tabla-usuarios { 
+    width: 100%; 
+    border-collapse: collapse; 
+}
+
+.tabla-usuarios th, 
+.tabla-usuarios td { 
+    padding: 12px 15px; 
+    border-bottom: 1px solid #e0e0e0; 
+    text-align: left; 
+    vertical-align: middle;
+}
+
+.tabla-usuarios th { 
+    background-color: #f4f6f9; 
+    font-weight: 600; 
+    color: #555; 
+}
+
+.tabla-usuarios tbody tr:hover { 
+    background-color: #f9fafb; 
+}
+
+.acciones button { 
+    border: none; 
+    border-radius: 5px; 
+    padding: 5px 10px; 
+    color: white; 
+    cursor: pointer; 
+    margin-right: 5px; 
+}
+
+.btn-editar { 
+    background-color: #ffc107; 
+    color: #333; 
+}
+
+.btn-borrar { 
+    background-color: #dc3545; 
+}

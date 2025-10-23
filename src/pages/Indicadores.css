@@ -1,0 +1,50 @@
+/* =================================================================== */
+/* CSS PARA INDICADORES.CSS (Cleaned Version)                          */
+/* =================================================================== */
+
+/* The main layout styles (grid, etc.) have been moved to index.css.
+   Only styles specific to this page's content remain here. */
+
+/* Style for the page title */
+.main-content h1 {
+    color: rgb(35, 65, 20);
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* Container for the document grid */
+.documentos-grid {
+    display: grid;
+    /* Creates self-adjusting columns with a minimum width of 300px */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem; /* Space between items */
+}
+
+/* Style for each document "card" or link */
+.indicadores-links {
+    background-color: white;
+    border: 1px solid #e0eeef;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Removes the underline from links */
+}
+
+.indicadores-links:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border-color: #007bff; /* A more noticeable hover color */
+}
+
+.indicadores-links p {
+    margin: 0;
+    color: #333; /* A softer dark gray instead of pure black */
+    font-weight: 500;
+    font-size: 1.1rem;
+}

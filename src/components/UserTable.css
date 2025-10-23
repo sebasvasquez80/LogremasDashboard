@@ -1,0 +1,64 @@
+.tabla-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.tabla-container h2 {
+    text-align: center;
+    color: #1a253c;
+    margin-top: 0;
+    margin-bottom: 2rem;
+}
+
+.tabla-usuarios {
+    width: 100%;
+    border-collapse: collapse; /* Une los bordes de las celdas */
+}
+
+.tabla-usuarios th,
+.tabla-usuarios td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+.tabla-usuarios th {
+    background-color: #f4f6f9;
+    font-weight: 600;
+    color: #555;
+}
+
+.tabla-usuarios tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+.acciones button {
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: white;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.btn-editar {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.btn-borrar {
+    background-color: #dc3545;
+}
+
+.tabla-scroll-container {
+    /* Si el contenido (la tabla) es más ancho que el contenedor,
+       añade una barra de scroll horizontal. */
+    overflow-x: auto;
+    
+    /* Pequeño truco para que se vea mejor en navegadores Webkit (Chrome, Safari) */
+    -webkit-overflow-scrolling: touch;
+}

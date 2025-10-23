@@ -1,0 +1,180 @@
+/* =================================================================== */
+/* CSS PARA HOME.CSS (Estilo de Dashboard)                             */
+/* =================================================================== */
+
+/* Los estilos del layout principal (el grid de 3 columnas) están en index.css.
+   Aquí solo quedan los estilos para el contenido específico de la página Home. */
+
+/* === Cabecera del Contenido === */
+.home-header {
+    margin-bottom: 2rem;
+}
+
+.home-header h1 {
+    font-size: 1.8rem;
+    color: rgb(35, 65, 20);
+    margin: 0;
+}
+
+.breadcrumb {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin: 0.25rem 0 0 0;
+}
+
+/* === Grid para las Tarjetas KPI === */
+.kpi-grid {
+    display: grid;
+    /* Crea 3 columnas en escritorio, 1 en móvil */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.kpi-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eef0f3;
+}
+
+.kpi-icon-wrapper {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.kpi-icon {
+    font-size: 1.8rem;
+}
+
+.kpi-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.kpi-title {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+}
+
+.kpi-value {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1a253c;
+}
+
+/* === Tarjeta de Gráfica Principal === */
+.dashboard-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eef0f3;
+}
+
+.chart-card h3 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.chart-placeholder {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* =================================================================== */
+/* === 5. ESTILOS DE LA SECCIÓN DE ESTADÍSTICAS / ACTIVIDAD          */
+/* =================================================================== */
+
+.home-stats {
+    margin-top: 1rem;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eef0f3;
+}
+
+.home-stats h3 {
+    
+    font-size: 1.1rem;
+    color: #000000; /* Texto blanco para el título */
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.activity-list li {
+    position: relative;
+    padding-left: 30px; /* Damos más espacio para la línea y el punto */
+    padding-bottom: 1.5rem;
+    /* La línea vertical */
+    border-left: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.activity-list li:last-child {
+    border-left: 2px solid transparent; /* Ocultamos la línea del último elemento */
+    padding-bottom: 0;
+}
+
+/* --- La Magia del Punto de la Línea de Tiempo --- */
+.activity-list li::before {
+    content: '';
+    position: absolute;
+    
+    /* 2. Corrección de alineación del punto */
+    left: -7px; /* Centra perfectamente un punto de 12px (+2px de borde) sobre una línea de 2px */
+    top: 5px;   /* Ajusta la altura vertical del punto */
+
+    /* 3. Estilos del punto */
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #4757a7; /* Color azul del punto interior */
+    border: 2px solid rgb(22, 57, 85); /* Borde del color del fondo para crear el efecto "flotante" */
+}
+
+.activity-list .activity-time {
+    display: block;
+    font-size: 0.8rem;
+    color: #88919c; /* Un gris claro para el tiempo */
+    margin-bottom: 0.35rem;
+}
+
+.activity-list p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #000000; /* Texto blanco/casi blanco para la descripción */
+    line-height: 1.5;
+}
+
+/* Ajustes para la vista móvil */
+@media (max-width: 768px) {
+    .home-stats {
+        padding: 1.5rem;
+    }
+}
