@@ -1,0 +1,101 @@
+/* ================================================= */
+/* CSS PARA LATERALNAV.CSS (Estilo NiceAdmin sin logo) */
+/* ================================================= */
+
+/* === 1. ESTILOS BASE PARA ESCRITORIO === */
+.lateral-nav {
+    background-color: #ffffff; /* Fondo blanco */
+    color: #444444;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #eef0f3;
+    transition: transform 0.3s ease-in-out;
+    box-sizing: border-box;
+}
+
+.nav-menu {
+    width: 100%;
+    height: 100%;
+    display: flex; /* Mantenemos flex para controlar la lista */
+    flex-direction: column; /* La lista ocupa el espacio vertical */
+}
+
+/* --- Lista de Navegación --- */
+.nav-list {
+    list-style: none;
+    /* Añadimos padding arriba ahora que no hay logo */
+    padding: 20px 15px 15px 15px;
+    margin: 0;
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex; /* Añadido para controlar el gap */
+    flex-direction: column; /* Añadido para controlar el gap */
+    gap: 8px; /* Espacio entre items reducido */
+}
+
+/* --- Ítem de Navegación --- */
+/* NavLink genera una <a>, aplicamos estilos a ella */
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px; /* Padding reducido */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    color: rgb(14, 25, 8);
+    text-decoration: none; /* Quitamos subrayado de enlace */
+    /* Quitamos el margen inferior, ahora usamos gap en ul */
+    /* margin-bottom: 8px; */
+}
+
+/* Efecto al pasar el mouse */
+.nav-item:hover {
+    background-color: rgba(95, 164, 60, 0.108);
+    color: rgb(95, 164, 60);
+}
+
+/* Estilo para el item ACTIVO (NavLink añade la clase .active) */
+.nav-item.active {
+    background-color: rgba(95, 164, 60, 0.108);
+    color: rgb(95, 164, 60);
+    font-weight: 600; /* Hacemos el texto un poco más grueso */
+}
+
+.nav-icon {
+    font-size: 1.1rem; /* Icono un poco más pequeño */
+    margin-right: 10px;
+    flex-shrink: 0;
+    width: 20px;
+    text-align: center;
+}
+
+.nav-text {
+    font-size: 0.9rem;
+    font-weight: 500; /* Peso normal por defecto */
+}
+
+/* === 2. ESTILOS PARA MÓVIL (Menú Deslizable) === */
+@media (max-width: 768px) {
+    .lateral-nav {
+        position: fixed;
+        width: 250px;
+        height: 100vh;
+        left: 0;
+        top: 0;
+        background-color: #ffffff; 
+        box-shadow: 3px 0 15px rgba(0,0,0,0.1);
+        transform: translateX(-100%); 
+        
+        /* Z-index MÁS ALTO que el overlay */
+        z-index: 1200; 
+    }
+
+    .lateral-nav.drawer-closed { transform: translateX(-100%); }
+    .lateral-nav.drawer-open { transform: translateX(0); }
+
+    .nav-list {
+        padding-top: 20px; /* Aseguramos padding superior en móvil */
+    }
+}

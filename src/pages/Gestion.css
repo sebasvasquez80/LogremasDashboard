@@ -1,0 +1,50 @@
+/* =================================================================== */
+/* CSS PARA GESTION.CSS (Versión Limpia)                               */
+/* =================================================================== */
+
+/* Los estilos de layout principal (grid, márgenes) fueron movidos a index.css.
+   Aquí solo quedan los estilos para el contenido específico de esta página. */
+
+/* Estilo para el título de la página (será aplicado por .main-content h1) */
+.main-content h1 {
+    color: rgb(35, 65, 20);
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* Contenedor para la cuadrícula de documentos */
+.documentos-grid {
+    display: grid;
+    /* Crea columnas que se ajustan solas, con un mínimo de 300px */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem; /* Espacio entre los elementos */
+}
+
+/* Estilo para cada "tarjeta" de documento */
+.gestion-links {
+    background-color: white;
+    border: 1px solid #e0eeef;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Quitamos el subrayado si es un enlace */
+}
+
+.gestion-links:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border-color: #007bff;
+}
+
+.gestion-links p {
+    margin: 0;
+    color: #333;
+    font-weight: 500;
+    font-size: 1.1rem;
+}

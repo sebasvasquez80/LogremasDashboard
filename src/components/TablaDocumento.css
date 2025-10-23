@@ -1,0 +1,18 @@
+.url-cell {
+    /* Ancho máximo que permitiremos para esta celda */
+    max-width: 250px; 
+    
+    /* Las 3 propiedades mágicas para acortar el texto */
+    white-space: nowrap; /* Evita que el texto salte a la siguiente línea */
+    overflow: hidden; /* Oculta el texto que se desborda */
+    text-overflow: ellipsis; /* Añade los puntos suspensivos "..." */
+}
+
+.tabla-scroll-container {
+    /* Si el contenido (la tabla) es más ancho que el contenedor,
+       añade una barra de scroll horizontal. */
+    overflow-x: auto;
+    
+    /* Pequeño truco para que se vea mejor en navegadores Webkit (Chrome, Safari) */
+    -webkit-overflow-scrolling: touch;
+}

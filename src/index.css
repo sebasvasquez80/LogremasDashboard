@@ -1,0 +1,96 @@
+/* src/index.css (Plano Maestro Corregido) */
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Open Sans", sans-serif;
+}
+
+/* === LAYOUT PRINCIPAL === */
+.page-layout {
+    height: 100vh; 
+    width: 100vw;
+    overflow: hidden; 
+    display: grid;
+    /* Filas: Header (fijo), Contenido (flexible) */
+    grid-template-rows: 60px 1fr; 
+    /* Columnas: Sidebar (fija), Contenido (flexible) */
+    grid-template-columns: 250px 1fr; 
+    grid-template-areas:
+        "header header"
+        "sidebar content";
+    background-color: #f4f7fa; 
+}
+
+/* === POSICIONAMIENTO DE ÁREAS === */
+.sidebar-area { 
+    grid-area: sidebar; 
+    z-index: 10;
+    background-color: #ffffff; /* Fondo blanco para el contenedor */
+    border-right: 1px solid #eef0f3; /* Borde derecho */
+    overflow-y: auto; /* Scroll si el menú es muy largo */
+}
+.header-area { 
+    grid-area: header; 
+    background-color: white; 
+    z-index: 15;
+    border-bottom: 1px solid #eef0f3;
+    
+}
+.main-content { 
+    grid-area: content; 
+    overflow-y: auto;
+    padding: 2.5rem; 
+    background-color: #f4f7fa;
+    z-index: 5;
+}
+
+/* === MEDIA QUERY MÓVIL === */
+@media (max-width: 768px) {
+    .page-layout {
+        /* Mantenemos una sola columna */
+        grid-template-columns: 1fr;
+        /* El sidebar ya NO forma parte del grid aquí */
+        grid-template-areas:
+            "header"
+            "content";
+        /* Mantenemos las filas */
+        grid-template-rows: 60px 1fr;
+    }
+
+    /* CORRECCIÓN: En lugar de ocultarlo con display: none,
+       simplemente no le asignamos un área de grid.
+       El div .sidebar-area seguirá existiendo en el DOM, permitiendo que
+       el LateralNav (que se vuelve 'fixed' en su propio CSS) funcione. */
+    .sidebar-area {
+       grid-area: initial; /* Quitamos su asignación al grid */
+       /* No usamos display: none; */
+       
+       /* Añadimos esto para asegurarnos que no interfiera con el layout */
+       width: 0; 
+       height: 0;
+       overflow: hidden;
+       /* Opcional: mandarlo detrás por si acaso, aunque no debería ser necesario */
+       /* z-index: -1; */ 
+    }
+
+    .main-content {
+        padding: 1.5rem;
+    }
+}
+
+/* === 4. ESTILO PARA EL OVERLAY DEL MENÚ MÓVIL === */
+.drawer-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4); 
+    
+    /* Z-index ALTO, pero MENOR que el del drawer */
+    z-index: 1100; 
+    
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.drawer-overlay.active { opacity: 1; visibility: visible; }

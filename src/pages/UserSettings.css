@@ -1,0 +1,58 @@
+/* =================================================================== */
+/* 3. ESTILOS DEL CONTENIDO INTERNO (Títulos, botones, etc.)           */
+/* =================================================================== */
+
+.settings-content-area h1 {
+    font-size: 2rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    color: #1a253c;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 1rem;
+}
+
+.settings-content-area p {
+    font-weight: bold;
+    margin-top: 1.5rem;
+    color: #555;
+    font-size: 1.1rem;
+}
+
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los botones pasen a la siguiente línea si no caben */
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.action-buttons button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-buttons button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Colores específicos para cada botón (los mismos que te di antes) */
+.create-user { background-color: #28a745; }
+.create-document { background-color: #17a2b8; }
+.change-password { background-color: #ffc107; color: #333; }
+.update-profile { background-color: #6c757d; }
+
+/* 👇 AÑADE ESTA NUEVA REGLA AL FINAL DEL ARCHIVO 👇 */
+.section-title {
+    /* Aumenta el margen superior para crear más espacio. 
+       Puedes ajustar el valor (3rem, 4rem, etc.) a tu gusto. */
+    margin-top: 1rem; 
+}

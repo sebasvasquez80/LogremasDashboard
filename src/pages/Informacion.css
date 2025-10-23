@@ -1,0 +1,121 @@
+/* =================================================================== */
+/* CSS PARA INFORMACION.CSS (Página Principal Pre-Login)             */
+/* =================================================================== */
+
+/* === 1. Estilos Generales de la Página === */
+.informacion-page {
+    min-height: 100vh; /* Ocupa al menos toda la altura de la pantalla */
+    background-color: #f8f9fa; /* Un fondo gris muy claro */
+    display: flex;
+    flex-direction: column; /* Apila el nav y el section verticalmente */
+}
+
+/* === 2. Estilos de la Barra de Navegación Superior === */
+.informacion-page nav {
+    background-color: rgb(255, 255, 255);
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between; /* Espacia los elementos: logo | título | login */
+    align-items: center;
+    border-bottom: 1px solid #eef0f3;
+}
+
+/* Logo */
+.informacion-page nav img {
+    height: 50px; /* Ajusta según el tamaño de tu logo */
+    width: auto;
+}
+
+/* Título */
+.informacion-page nav h1 {
+    font-size: 1.5rem;
+    color: rgb(35, 65, 20); 
+    margin: 0; /* Quitamos margen por defecto */
+    /* Centra el título si sobra espacio */
+    position: absolute; 
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Contenedor de la sección de login (texto + botón) */
+.informacion-page nav div {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* Espacio entre "Ingresa" y el botón */
+}
+
+.informacion-page nav span {
+    font-size: 0.9rem;
+    color: #55555597;
+    font-weight: 500;
+}
+
+/* Botón de Login */
+.login-btn {
+    background-color: rgb(35, 65, 20); /* Azul oscuro corporativo */
+    color: white;
+    border: none;
+    border-radius: 50%; /* Círculo */
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    font-size: 1.2rem; /* Tamaño del icono */
+}
+
+.login-btn:hover {
+    background-color: #3b9843dc; /* Un azul un poco más claro al pasar el mouse */
+    transform: scale(1.1);
+}
+
+/* === 3. Estilos de la Sección de Contenido === */
+.informacion-content {
+    flex-grow: 1; /* Hace que esta sección ocupe el espacio restante */
+    padding: 3rem 2rem;
+    max-width: 900px; /* Ancho máximo para el contenido */
+    margin: 0 auto; /* Centra el contenido horizontalmente */
+    text-align: center; /* Centra el texto */
+}
+
+.informacion-content h2 {
+    font-size: 2.2rem;
+    color: #1a3c21;
+    margin-bottom: 1rem;
+}
+
+.informacion-content p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* === 4. Ajustes Responsivos (Opcional pero recomendado) === */
+@media (max-width: 768px) {
+    .informacion-page nav {
+        padding: 0.75rem 1rem;
+    }
+    .informacion-page nav h1 {
+        /* Ocultamos el título central en pantallas pequeñas para dar espacio */
+        display: none; 
+    }
+    .informacion-content {
+        padding: 2rem 1rem;
+    }
+    .informacion-content h2 {
+        font-size: 1.8rem;
+    }
+    .informacion-content p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .informacion-page nav span {
+        /* Ocultamos el texto "Ingresa" en pantallas muy pequeñas */
+        display: none;
+    }
+}
