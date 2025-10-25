@@ -24,8 +24,10 @@ function Login() {
             const apiUrl = import.meta.env.VITE_API_URL;
             const loginUrl = `${apiUrl}/api/usuarios/login`;
 
+            console.log("Intentando conectar a:", loginUrl);
+
             const response = await axios.post(loginUrl, {
-                nombre: usuario,
+                usuario: usuario,
                 contraseña: contraseña
             });
 
