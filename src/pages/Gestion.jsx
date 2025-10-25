@@ -10,7 +10,7 @@ function Gestion (){
     // 1. Creamos un estado para guardar la información del usuario logueado
     const [usuario, setUsuario] = useState(null);
 
-    const esAdmin = usuario && usuario.rol === 'admin';
+    const esAdmin = usuario && usuario.rol === 'Administracion';
 
     const documentosVisibles = documentos.filter(doc => {
         const docEsParaAdmin = doc.id_rol === 1;
@@ -37,7 +37,7 @@ function Gestion (){
                     return;
                 }
                 const apiUrl = import.meta.env.VITE_API_URL;
-                const response = await axios.get(`${apiUrl}/api/documentos?page_id=3`, {
+                const response = await axios.get(`${apiUrl}/api/documentos?id_pagina=3`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setDocumentos(response.data);

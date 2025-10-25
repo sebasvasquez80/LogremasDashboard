@@ -9,7 +9,7 @@ function Planeacion() {
     // 1. Creamos un estado para guardar la información del usuario logueado
     const [usuario, setUsuario] = useState(null);
 
-    const esAdmin = usuario && usuario.rol === 'admin';
+    const esAdmin = usuario && usuario.rol === 'Administracion';
     
     // Creamos una nueva lista solo con los documentos visibles
     const documentosVisibles = documentos.filter(doc => {
@@ -37,7 +37,7 @@ function Planeacion() {
                     return;
                 }
                 const apiUrl = import.meta.env.VITE_API_URL;
-                const response = await axios.get(`${apiUrl}/api/documentos?page_id=1`, {
+                const response = await axios.get(`${apiUrl}/api/documentos?id_pagina=1`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setDocumentos(response.data);

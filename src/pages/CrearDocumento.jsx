@@ -11,8 +11,9 @@ function CrearDocumento() {
     // Estados para los campos del formulario
     const [nombre, setNombre] = useState('');
     const [url, setUrl] = useState('');
-    const [idRol, setIdRol] = useState('');
-    const [pageId, setPageId] = useState('');
+    const [id_rol, setIdRol] = useState('');
+    const [id_pagina, setIdPagina] = useState('');
+    const [id_subregion, setIdSubregion] = useState('');
 
     // Estados para la lógica del componente
     const [cargando, setCargando] = useState(false);
@@ -41,7 +42,7 @@ function CrearDocumento() {
     // Manejar el envío del formulario para crear un nuevo documento
     const handleCreateDocument = async (e) => {
         e.preventDefault();
-        if (!nombre || !url || !idRol || !pageId) {
+        if (!nombre || !url || !id_subregion || !id_rol || !id_pagina) {
             Swal.fire('Campos incompletos', 'Por favor, rellena todos los campos.', 'error');
             return;
         }
@@ -52,14 +53,15 @@ function CrearDocumento() {
             const newDocumentData = {
                 nombre,
                 url,
-                id_rol: parseInt(idRol),
-                page_id: parseInt(pageId)
+                id_subregion: parseInt(id_subregion),
+                id_rol: parseInt(id_rol),
+                id_pagina: parseInt(id_pagina)
             };
             await axios.post(`${apiUrl}/api/documentos`, newDocumentData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             Swal.fire('¡Documento creado!', `El documento '${nombre}' ha sido registrado.`, 'success');
-            setNombre(''); setUrl(''); setIdRol(''); setPageId('');
+            setNombre(''); setUrl(''); setIdSubregion(''); setIdRol(''); setIdPagina('');
             fetchDocuments(); // Refrescar la tabla
         } catch (err) {
             let msg = err.response?.data?.error || "Ocurrió un error al crear el documento.";
@@ -106,12 +108,22 @@ function CrearDocumento() {
                 <input id="swal-url" class="swal2-input" value="${documentoEditar.url}">
                 <select id="swal-rol" class="swal2-input">
                     <option value="1" ${documentoEditar.id_rol === 1 ? 'selected' : ''}>Administrador</option>
-                    <option value="2" ${documentoEditar.id_rol === 2 ? 'selected' : ''}>Operario</option>
+                    <option value="2" ${documentoEditar.id_rol === 2 ? 'selected' : ''}>Coordinacion</option>
+                    <option value="3" ${documentoEditar.id_rol === 3 ? 'selected' : ''}>Lideracion</option>
+                    <option value="4" ${documentoEditar.id_rol === 4 ? 'selected' : ''}>Desarrollo</option>
                 </select>
                 <select id="swal-page" class="swal2-input">
-                    <option value="1" ${documentoEditar.page_id === 1 ? 'selected' : ''}>Planeación</option>
-                    <option value="2" ${documentoEditar.page_id === 2 ? 'selected' : ''}>Indicadores</option>
-                    <option value="3" ${documentoEditar.page_id === 3 ? 'selected' : ''}>Gestión</option>
+                    <option value="1" ${documentoEditar.id_pagina === 1 ? 'selected' : ''}>Planeación</option>
+                    <option value="2" ${documentoEditar.id_pagina === 2 ? 'selected' : ''}>Indicadores</option>
+                    <option value="3" ${documentoEditar.id_pagina === 3 ? 'selected' : ''}>Gestión</option>
+                    <option value="4" ${documentoEditar.id_pagina === 4 ? 'selected' : ''}>Facturación</option>
+                </select>
+                <select id="swal-subregion" class="swal2-input">
+                    <option value="1" ${documentoEditar.id_subregion === 1 ? 'selected' : ''}>Sur Antioquia</option>
+                    <option value="2" ${documentoEditar.id_subregion === 2 ? 'selected' : ''}>Norte Antioquia</option>
+                    <option value="3" ${documentoEditar.id_subregion === 3 ? 'selected' : ''}>Occidente Cundinamarca</option>
+                    <option value="4" ${documentoEditar.id_subregion === 4 ? 'selected' : ''}>Norte Cundinamarca</option>
+                    <option value="5" ${documentoEditar.id_subregion === 5 ? 'selected' : ''}>Valle Atlantico</option>
                 </select>
             `,
             focusConfirm: false,
@@ -120,7 +132,8 @@ function CrearDocumento() {
                     nombre: document.getElementById('swal-nombre').value,
                     url: document.getElementById('swal-url').value,
                     id_rol: parseInt(document.getElementById('swal-rol').value),
-                    page_id: parseInt(document.getElementById('swal-page').value)
+                    id_pagina: parseInt(document.getElementById('swal-page').value),
+                    id_subregion: parseInt(document.getElementById('swal-subregion').value)
                 }
             }
         });
@@ -155,20 +168,34 @@ function CrearDocumento() {
                 </div>
                 <div className="form-group">
                     <label htmlFor="rol">Visible para Rol</label>
-                    <select id="rol" value={idRol} onChange={(e) => setIdRol(e.target.value)}>
+                    <select id="rol" value={id_rol} onChange={(e) => setIdRol(e.target.value)}>
                         <option value="" disabled>Selecciona un rol</option>
-                        <option value="1">Administrador</option>
-                        <option value="2">Operario</option>
+                        <option value="1">Administración</option>
+                        <option value="2">Coordinación</option>
+                        <option value="3">Lideración</option>
+                        <option value="4">Desarrollo</option>
                     </select>
                 </div>
                 <div className="form-group">
                     <label htmlFor="grupo">Pestaña</label>
-                    <select id="grupo" value={pageId} onChange={(e) => setPageId(e.target.value)}>
+                    <select id="grupo" value={id_pagina} onChange={(e) => setIdPagina(e.target.value)}>
                         <option value="" disabled>Selecciona una pestaña</option>
                         <option value="1">Planeación</option>
                         <option value="2">Indicadores</option>
                         <option value="3">Gestión</option>
+                        <option value="4">Facturación</option>
                     </select>
+                </div>
+                <div className="form-group">
+                        <label htmlFor="subregion">Region del usuario</label>
+                        <select id="subregion" value={id_subregion} onChange={(e) => setIdSubregion(e.target.value)}>
+                            <option value="" disabled>Selecciona un rol...</option>
+                            <option value="1">Sur Antioquia</option>
+                            <option value="2">Norte Antioquia</option>
+                            <option value="3">Occidente Cundinamarca</option>
+                            <option value="4">Norte Cundinamarca</option>
+                            <option value="5">Valle Atlantico</option>
+                        </select>
                 </div>
                 <button type="submit" className="submit-btn" disabled={cargando}>
                     {cargando ? 'Creando...' : 'Crear Documento'}

@@ -107,13 +107,14 @@ function CreateUser() {
                     <option value="3" ${usuarioAEditar.id_subregion === 3 ? 'selected' : ''}>Occidente Cundinamarca</option>
                     <option value="4" ${usuarioAEditar.id_subregion === 4 ? 'selected' : ''}>Norte Cundinamarca</option>
                     <option value="5" ${usuarioAEditar.id_subregion === 5 ? 'selected' : ''}>Valle Atlantico</option>
-                    </select>
-                    `,
+                </select>
+                `,
             focusConfirm: false,
             preConfirm: () => {
                 return {
                     nombre: document.getElementById('swal-nombre').value,
-                    id_rol: parseInt(document.getElementById('swal-rol').value)
+                    id_rol: parseInt(document.getElementById('swal-rol').value),
+                    id_subregion: parseInt(document.getElementById('swal-subregion').value)
                 }
             }
         });
@@ -157,7 +158,7 @@ function CreateUser() {
                     <div className="form-group">
                         <label htmlFor="rol">Rol de usuario</label>
                         <select id="rol" value={id_rol} onChange={(e) => setIdRol(e.target.value)}>
-                            <option value="" disabled>Selecciona un rol...</option>
+                            <option value="" disabled>Selecciona un rol</option>
                             <option value="1">Administración</option>
                             <option value="2">Coordinación</option>
                             <option value="3">Lideración</option>

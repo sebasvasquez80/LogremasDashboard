@@ -42,7 +42,7 @@ function UserSettings() {
             <>
                 <h1>Opciones de Usuario</h1>
 
-                {user && user.rol.toLowerCase().trim() === 'administracion' || 'desarrollo' && (
+                {user && (user.rol.toLowerCase().trim() === 'administracion' || user.rol.toLowerCase().trim() === 'desarrollo') && (
                     <>
                         <p>Herramientas de Administrador</p>
                         <div className="action-buttons">

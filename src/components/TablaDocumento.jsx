@@ -6,15 +6,49 @@ function TablaDocumento({ documentos, onBorrar, onEditar }) {
     const getNombrePestana = (id) => {
         switch (id) {
             case 1:
-                return 'planeacion';
+                return 'Planeación';
             case 2:
-                return 'graficos';
+                return 'Graficos';
             case 3:
-                return 'gestion';
+                return 'Gestión';
+            case 4:
+                return 'Facturación'
             default:
                 return 'Desconocido'; // Una opción por defecto por si el id no es 1, 2 o 3
         }
     };
+
+    const getRolNombre = (idRol) => {
+        switch (idRol) {
+            case 1:
+                return 'Administración';
+            case 2:
+                return 'Coordinación';
+            case 3:
+                return 'Lideración';
+            case 4:
+                return 'Desarrollo';
+            default:
+                return 'Desconocido'; // Para cualquier otro valor inesperado
+        }
+    }
+
+    const getSubregion = (idSubregion) => {
+        switch (idSubregion) {
+            case 1:
+                return 'Sur Antioquia';
+            case 2:
+                return 'Norte Antioquia';
+            case 3:
+                return 'Occidente Cundinamarca';
+            case 4:
+                return 'Norte Cundinamarca';
+            case 5:
+                return 'Valle Atlantico';
+            default:
+                return 'Desconocido'           
+        }
+    }
 
     return (
         <div className="tabla-container">
@@ -26,8 +60,9 @@ function TablaDocumento({ documentos, onBorrar, onEditar }) {
                         <th>ID</th>
                         <th>Nombre de Documento</th>
                         <th>URL</th>
-                        <th>Rol ID</th>
+                        <th>Rol</th>
                         <th>Clase</th>
+                        <th>Subregion</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -40,8 +75,9 @@ function TablaDocumento({ documentos, onBorrar, onEditar }) {
                             <td className="url-cell" title={document.url}>
                                 {document.url}
                             </td>
-                            <td>{document.id_rol === 1 ? 'Admin' : 'Operario'}</td>
-                            <td>{getNombrePestana(document.page_id)}</td>
+                            <td>{getRolNombre(document.id_rol)}</td>
+                            <td>{getNombrePestana(document.id_pagina)}</td>
+                            <td>{getSubregion(document.id_subregion)}</td>
                             <td className="acciones">
                                 {/* El botón de editar ahora llama a onEditar, pasándole el objeto de usuario completo */}
                                 <button
