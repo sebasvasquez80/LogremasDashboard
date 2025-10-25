@@ -34,7 +34,7 @@ function LateralNav({ isOpen }) {
                         <span className="nav-text">Gestión</span>
                     </NavLink>
 
-                    <NavLink to="/gestion" className='nav-item'>
+                    <NavLink to="/facturacion" className='nav-item'>
                         <LuChartLine className="nav-icon" />
                         <span className="nav-text">Facturación</span>
                     </NavLink>

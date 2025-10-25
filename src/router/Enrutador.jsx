@@ -9,6 +9,7 @@ import CrearDocumento from '../pages/CrearDocumento.jsx';
 import PageLayout from '../components/PageLayout.jsx';
 import Informacion from '../pages/Informacion.jsx';
 import CambiarContrasena from '../pages/CambiarContrasena.jsx';
+import Facturacion from '../pages/Facturacion.jsx';
 
 export let Enrutador = [
     {
@@ -50,5 +51,9 @@ export let Enrutador = [
     {
     path: '/cambiarcontrasena',
     element: <PageLayout><CambiarContrasena/></PageLayout>
+    },
+    {
+    path: '/facturacion',
+    element: <PageLayout><Facturacion/></PageLayout>
     }
 ]

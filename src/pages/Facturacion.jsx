@@ -1,9 +1,9 @@
-import './Gestion.css';
+import './Facturacion.css'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-function Gestion (){
+function Facturacion(){
 
     const [documentos, setDocumentos] = useState([]);
     const [cargando, setCargando] = useState(true);
@@ -37,7 +37,7 @@ function Gestion (){
                     return;
                 }
                 const apiUrl = import.meta.env.VITE_API_URL;
-                const response = await axios.get(`${apiUrl}/api/documentos?id_pagina=3`, {
+                const response = await axios.get(`${apiUrl}/api/documentos?id_pagina=4`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setDocumentos(response.data);
@@ -53,9 +53,8 @@ function Gestion (){
     }, []);
 
     return(
-        
-            <>
-                <h1>Gestión</h1>
+        <>
+                <h1>Facturación</h1>
                 
                  {cargando ? (
                     <p>Cargando documentos...</p>
@@ -73,8 +72,8 @@ function Gestion (){
                         )}
                     </div>
                 )}
-            </>         
+            </>  
     )
 }
 
-export default Gestion;
+export default Facturacion;
