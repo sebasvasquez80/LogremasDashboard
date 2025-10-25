@@ -7,8 +7,10 @@ import './CreateUser.css';
 
 function CreateUser() {
     const [nombre, setNombre] = useState('');
+    const [usuario, setUsuario] = useState('');
     const [contraseña, setContraseña] = useState('');
     const [id_rol, setIdRol] = useState('');
+    const [id_subregion, setIdSubregion] = useState('');
     const [cargando, setCargando] = useState(false);
     const [usuarios, setUsuarios] = useState([]);
 
@@ -32,16 +34,16 @@ function CreateUser() {
 
     const handleCreateUser = async (e) => {
         e.preventDefault();
-        if (!nombre || !contraseña || !id_rol) { Swal.fire('Campos incompletos', 'Por favor, rellena todos los campos.', 'error'); return; }
+        if (!nombre || !usuario || !contraseña || !id_rol || !id_subregion) { Swal.fire('Campos incompletos', 'Por favor, rellena todos los campos.', 'error'); return; }
         setCargando(true);
         try {
             const token = localStorage.getItem('token');
             const apiUrl = import.meta.env.VITE_API_URL;
-            await axios.post(`${apiUrl}/api/usuarios/register`, { nombre, contraseña, id_rol: parseInt(id_rol) }, {
+            await axios.post(`${apiUrl}/api/usuarios/register`, { nombre, usuario, contraseña, id_rol: parseInt(id_rol), id_subregion: parseInt(id_subregion) }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             Swal.fire('¡Usuario Creado!', `El usuario '${nombre}' ha sido registrado.`, 'success');
-            setNombre(''); setContraseña(''); setIdRol('');
+            setNombre(''); setUsuario(''); setContraseña(''); setIdRol(''); setIdSubregion('');
             fetchUsers();
         } catch (err) {
             let msg = err.response?.data?.error || "Ocurrió un error al crear el usuario.";
@@ -95,9 +97,18 @@ function CreateUser() {
                 <input id="swal-nombre" class="swal2-input" value="${usuarioAEditar.nombre}">
                 <select id="swal-rol" class="swal2-input">
                     <option value="1" ${usuarioAEditar.id_rol === 1 ? 'selected' : ''}>Administrador</option>
-                    <option value="2" ${usuarioAEditar.id_rol === 2 ? 'selected' : ''}>Operario</option>
+                    <option value="2" ${usuarioAEditar.id_rol === 2 ? 'selected' : ''}>Coordinacion</option>
+                    <option value="3" ${usuarioAEditar.id_rol === 3 ? 'selected' : ''}>Lideracion</option>
+                    <option value="4" ${usuarioAEditar.id_rol === 4 ? 'selected' : ''}>Desarrollo</option>
                 </select>
-            `,
+                <select id="swal-subregion" class="swal2-input">
+                    <option value="1" ${usuarioAEditar.id_subregion === 1 ? 'selected' : ''}>Sur Antioquia</option>
+                    <option value="2" ${usuarioAEditar.id_subregion === 2 ? 'selected' : ''}>Norte Antioquia</option>
+                    <option value="3" ${usuarioAEditar.id_subregion === 3 ? 'selected' : ''}>Occidente Cundinamarca</option>
+                    <option value="4" ${usuarioAEditar.id_subregion === 4 ? 'selected' : ''}>Norte Cundinamarca</option>
+                    <option value="5" ${usuarioAEditar.id_subregion === 5 ? 'selected' : ''}>Valle Atlantico</option>
+                    </select>
+                    `,
             focusConfirm: false,
             preConfirm: () => {
                 return {
@@ -132,8 +143,12 @@ function CreateUser() {
                 <form className="form-create-user" onSubmit={handleCreateUser}>
                     <h1>Crear Nuevo Usuario</h1>
                     <div className="form-group">
-                        <label htmlFor="nombre">Nombre de usuario</label>
-                        <input type="text" id="nombre" placeholder="Escribe el nombre de usuario" value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                        <label htmlFor="nombre">Nombre</label>
+                        <input type="text" id="nombre" placeholder="Escribe el nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="usuario">Usuario</label>
+                        <input type="text" id="usuario" placeholder="Escribe el usuario" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Contraseña</label>
@@ -143,8 +158,21 @@ function CreateUser() {
                         <label htmlFor="rol">Rol de usuario</label>
                         <select id="rol" value={id_rol} onChange={(e) => setIdRol(e.target.value)}>
                             <option value="" disabled>Selecciona un rol...</option>
-                            <option value="1">Administrador</option>
-                            <option value="2">Operario</option>
+                            <option value="1">Administración</option>
+                            <option value="2">Coordinación</option>
+                            <option value="3">Lideración</option>
+                            <option value="4">Desarrollo</option>
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="subregion">Region del usuario</label>
+                        <select id="subregion" value={id_subregion} onChange={(e) => setIdSubregion(e.target.value)}>
+                            <option value="" disabled>Selecciona un rol...</option>
+                            <option value="1">Sur Antioquia</option>
+                            <option value="2">Norte Antioquia</option>
+                            <option value="3">Occidente Cundinamarca</option>
+                            <option value="4">Norte Cundinamarca</option>
+                            <option value="5">Valle Atlantico</option>
                         </select>
                     </div>
                     <button type="submit" className="submit-btn" disabled={cargando}>
