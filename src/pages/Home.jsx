@@ -4,13 +4,13 @@ import { FaShieldAlt, FaExclamationTriangle, FaBell } from "react-icons/fa";
 function Home() {
     return (
             <> 
-{/* --- ÁREA DE CONTENIDO PRINCIPAL --- */}
+
             <section className="home-content">
                 <div className="home-header">
                     <h1>Dashboard</h1>
                 </div>
-                {/* --- Fila de Tarjetas KPI --- */}
-                <div className="kpi-grid">
+
+                {/* <div className="kpi-grid">
                     <div className="kpi-card">
                         <div className="kpi-icon-wrapper" style={{ backgroundColor: 'rgba(40, 167, 69, 0.1)' }}>
                             <FaShieldAlt className="kpi-icon" style={{ color: '#28a745' }} />
@@ -40,17 +40,15 @@ function Home() {
                     </div>
                 </div>
 
-                {/* --- Gráfica Principal --- */}
                 <div className="dashboard-card chart-card">
                     <h3>Grafico</h3>
                     <div className="chart-placeholder">
                         <p>Contenido</p>
                     </div>
-                </div>
+                </div> */}
             </section>
 
-            {/* --- ÁREA DE ESTADÍSTICAS FIJA (LA BARRA DERECHA) --- */}
-            <section className='home-stats'>
+            {/* <section className='home-stats'>
                 <h3>Actividad Reciente</h3>
                 <ul className="activity-list">
                     <li>
@@ -66,7 +64,7 @@ function Home() {
                         <p>El documento 'WMS' fue eliminado.</p>
                     </li>
                 </ul>
-            </section>
+            </section> */}
 
             </>
     );
