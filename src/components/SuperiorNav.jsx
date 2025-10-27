@@ -7,7 +7,7 @@ import imagenes from '../assets/imagenes';
 
 function SuperiorNav({ onMenuClick }) {
     const navigate = useNavigate();
-    const rutaHome = () => navigate('/home');
+    const rutaHome = () => navigate('/');
     const rutaUserSettings = () => navigate('/usersettings');
 
     const handleLogout = () => {
