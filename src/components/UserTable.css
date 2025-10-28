@@ -51,6 +51,7 @@
 }
 
 .btn-borrar {
+    margin-top: 0.25rem;
     background-color: #dc3545;
 }
 
@@ -58,6 +59,8 @@
     /* Si el contenido (la tabla) es más ancho que el contenedor,
        añade una barra de scroll horizontal. */
     overflow-x: auto;
+
+    overflow-y: auto;
     
     /* Pequeño truco para que se vea mejor en navegadores Webkit (Chrome, Safari) */
     -webkit-overflow-scrolling: touch;

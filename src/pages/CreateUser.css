@@ -62,12 +62,14 @@
 
 /* === Styles for the User Table === */
 .tbl-container {
-    max-width: 700px;
+    max-width: 800px;
+    max-height: 100%;
     margin: 3rem auto; /* Top margin separates it from the form */
     padding: 2rem;
     background-color: white;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow-y: auto;
 }
 
 .tbl-container h2 { 
