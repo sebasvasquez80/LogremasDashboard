@@ -51,30 +51,18 @@
 /* === MEDIA QUERY MÓVIL === */
 @media (max-width: 768px) {
     .page-layout {
-        /* Mantenemos una sola columna */
+        /* En móvil, solo una columna */
         grid-template-columns: 1fr;
-        /* El sidebar ya NO forma parte del grid aquí */
         grid-template-areas:
             "header"
             "content";
-        /* Mantenemos las filas */
         grid-template-rows: 60px 1fr;
     }
 
-    /* CORRECCIÓN: En lugar de ocultarlo con display: none,
-       simplemente no le asignamos un área de grid.
-       El div .sidebar-area seguirá existiendo en el DOM, permitiendo que
-       el LateralNav (que se vuelve 'fixed' en su propio CSS) funcione. */
+    /* 🔹 El sidebar ya no forma parte del grid */
     .sidebar-area {
-       grid-area: initial; /* Quitamos su asignación al grid */
-       /* No usamos display: none; */
-       
-       /* Añadimos esto para asegurarnos que no interfiera con el layout */
-       width: 0; 
-       height: 0;
-       overflow: hidden;
-       /* Opcional: mandarlo detrás por si acaso, aunque no debería ser necesario */
-       /* z-index: -1; */ 
+        grid-area: initial; 
+        display: none; /* <-- ahora sí lo ocultamos por completo */
     }
 
     .main-content {
@@ -82,15 +70,47 @@
     }
 }
 
+/* === MEDIA QUERY ESCRITORIO === */
+@media (min-width: 769px) {
+    /* 🔹 El menú móvil (fuera del layout) NO se muestra en escritorio */
+    .lateral-nav.drawer-open,
+    .lateral-nav.drawer-closed {
+        display: none; /* Ocultamos SOLO el drawer móvil */
+    }
+
+    /* 🔹 Pero el sidebar fijo SÍ se muestra */
+    .sidebar-area .lateral-nav {
+        display: flex; /* Aseguramos que se muestre correctamente */
+    }
+
+    .drawer-overlay {
+        display: none;
+    }
+
+    .sidebar-area {
+        display: block;
+        width: 250px;
+        height: 100vh;
+    }
+}
+
+
 /* === 4. ESTILO PARA EL OVERLAY DEL MENÚ MÓVIL === */
 .drawer-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4); 
-    
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+
     /* Z-index ALTO, pero MENOR que el del drawer */
     z-index: 1100; 
-    
-    opacity: 0; visibility: hidden;
+
+    opacity: 0;
+    visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
-.drawer-overlay.active { opacity: 1; visibility: visible; }
+
+.drawer-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    display: block; /* Se muestra cuando está activo */
+}

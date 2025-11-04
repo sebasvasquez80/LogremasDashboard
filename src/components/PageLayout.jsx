@@ -1,34 +1,37 @@
-// src/components/PageLayout.jsx (Corrección Final)
-
 import { useState } from 'react';
 import LateralNav from "./LateralNav.jsx";
 import SuperiorNav from "./SuperiorNav.jsx";
 
 function PageLayout({ children }) {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const toggleDrawer = () => { setIsDrawerOpen(!isDrawerOpen); };
+    const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
 
     return (
         <div className="page-layout">
             
-            {/* 1. LateralNav FUERA del sidebar-area */}
-            
+            {/* 🔹 Sidebar (solo visible en escritorio) */}
+            <div className="sidebar-area">
+                <LateralNav isOpen={true} /> {/* siempre visible en escritorio */}
+            </div>
 
-            {/* 2. El sidebar-area VACÍO (solo para reservar espacio en escritorio) */}
-            <div className="sidebar-area"><LateralNav isOpen={isDrawerOpen} /></div> 
-            
+            {/* 🔹 Header */}
             <div className="header-area">
                 <SuperiorNav onMenuClick={toggleDrawer} />
             </div>
 
-            <div 
-                className={`drawer-overlay ${isDrawerOpen ? 'active' : ''}`} 
-                onClick={toggleDrawer} 
-            />
-
+            {/* 🔹 Contenido */}
             <section className="main-content">
                 {children}
             </section>
+
+            {/* 🔹 Menú móvil (drawer) */}
+            <LateralNav isOpen={isDrawerOpen} />
+
+            {/* 🔹 Overlay móvil */}
+            <div
+                className={`drawer-overlay ${isDrawerOpen ? 'active' : ''}`}
+                onClick={toggleDrawer}
+            />
         </div>
     );
 }

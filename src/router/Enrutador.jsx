@@ -10,6 +10,7 @@ import PageLayout from '../components/PageLayout.jsx';
 import Informacion from '../pages/Informacion.jsx';
 import CambiarContrasena from '../pages/CambiarContrasena.jsx';
 import Facturacion from '../pages/Facturacion.jsx';
+import ProtegerRuta from '../helpers/ProtegerRuta.jsx';
 
 export let Enrutador = [
     {
@@ -22,38 +23,38 @@ export let Enrutador = [
     },
     {
     path: '/home',
-    element: <PageLayout><Home /></PageLayout>
+    element: <ProtegerRuta> <PageLayout><Home /></PageLayout> </ProtegerRuta>
     },
     {
     path: '/planeacion',
-    element: <PageLayout><Planeacion/></PageLayout>
+    element: <ProtegerRuta> <PageLayout><Planeacion/></PageLayout> </ProtegerRuta>
     },
     {
     path: '/indicadores',
-    element: <PageLayout><Indicadores/></PageLayout>
+    element: <ProtegerRuta> <PageLayout><Indicadores/></PageLayout> </ProtegerRuta>
     },
     {
     path: '/gestion',
-    element: <PageLayout><Gestion/></PageLayout>
+    element: <ProtegerRuta> <PageLayout><Gestion/></PageLayout> </ProtegerRuta>
     },
     {
     path: '/usersettings',
-    element: <PageLayout><UserSettings/></PageLayout>
+    element: <ProtegerRuta> <PageLayout><UserSettings/></PageLayout> </ProtegerRuta>
     },
     {
     path: '/createuser',
-    element: <PageLayout><CreateUser/></PageLayout>
+    element: <ProtegerRuta> <PageLayout><CreateUser/></PageLayout> </ProtegerRuta>
     },
     {
     path: '/creardocumento',
-    element: <PageLayout><CrearDocumento/></PageLayout>
+    element: <ProtegerRuta> <PageLayout><CrearDocumento/></PageLayout> </ProtegerRuta>
     },
     {
     path: '/cambiarcontrasena',
-    element: <PageLayout><CambiarContrasena/></PageLayout>
+    element: <ProtegerRuta> <PageLayout><CambiarContrasena/></PageLayout> </ProtegerRuta>
     },
     {
     path: '/facturacion',
-    element: <PageLayout><Facturacion/></PageLayout>
+    element: <ProtegerRuta> <PageLayout><Facturacion/></PageLayout> </ProtegerRuta>
     }
 ]

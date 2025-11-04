@@ -6,7 +6,6 @@ import { LuLayoutDashboard, LuCalendarClock, LuChartColumnBig, LuNotebookPen, Lu
 function LateralNav({ isOpen }) {
     // No necesitamos useNavigate si usamos NavLink
     // const navigate = useNavigate();
-    
 
     return (
         <div className={`lateral-nav ${isOpen ? 'drawer-open' : 'drawer-closed'}`}>
