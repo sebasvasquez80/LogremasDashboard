@@ -3,25 +3,26 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+// 1. --- IMPORTA EL GRÁFICO ---
+// (Asegúrate de que la ruta sea correcta según donde guardaste el archivo)
+import GraficoUtilidad from '../components/GraficoUtilidad';
+
 function Facturacion(){
 
+    // --- Estados para Documentos (Tu código original) ---
     const [documentos, setDocumentos] = useState([]);
     const [cargando, setCargando] = useState(true);
-    // 1. Creamos un estado para guardar la información del usuario logueado
     const [usuario, setUsuario] = useState(null);
 
     const esAdmin = usuario && usuario.rol === 'Administracion';
 
     const documentosVisibles = documentos.filter(doc => {
         const docEsParaAdmin = doc.id_rol === 1;
-        // La condición para mostrar un documento es:
-        // 1. Si el usuario es admin, O
-        // 2. Si el documento NO es exclusivo para admins.
         return esAdmin || !docEsParaAdmin;
     });
 
+    // --- Efecto para Documentos (Tu código original) ---
     useEffect(() => {
-        // 2. Leemos los datos del usuario desde el localStorage
         const usuarioString = localStorage.getItem('user');
         if (usuarioString) {
             setUsuario(JSON.parse(usuarioString));
@@ -31,8 +32,6 @@ function Facturacion(){
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    // Si no hay token, no hacemos la petición.
-                    // El usuario será redirigido o no verá nada.
                     setCargando(false);
                     return;
                 }
@@ -52,15 +51,28 @@ function Facturacion(){
         fetchDocuments();
     }, []);
 
+    // --- Renderizado ---
     return(
         <>
-                <h1>Facturación</h1>
-                
-                 {cargando ? (
+            <h1>Facturación</h1>
+            
+            {/* --- 2. SECCIÓN DEL GRÁFICO (NUEVO) --- */}
+            {/* * Simplemente llamamos al componente.
+              * Ya incluye sus propios filtros (centro, mes, año)
+              * y su propia lógica para llamar al backend.
+            */}
+            <div className="grafico-container" style={{ marginBottom: '40px' }}>
+                <h2>Análisis de Utilidad</h2>
+                <GraficoUtilidad />
+            </div>
+
+            {/* --- 3. SECCIÓN DE DOCUMENTOS (Tu código original) --- */}
+            <div className="documentos-container">
+                <h2>Documentos Relacionados</h2>
+                {cargando ? (
                     <p>Cargando documentos...</p>
                 ) : (
                     <div className="documentos-grid">
-                        {/* Ahora hacemos el .map() sobre la lista YA FILTRADA */}
                         {documentosVisibles.length > 0 ? (
                             documentosVisibles.map(doc => (
                                 <a key={doc.id} href={doc.url} target="_blank" rel="noopener noreferrer" className="indicadores-links">
@@ -72,7 +84,8 @@ function Facturacion(){
                         )}
                     </div>
                 )}
-            </>  
+            </div>
+        </>  
     )
 }
 

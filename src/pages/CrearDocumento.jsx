@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
-
 import './CrearDocumento.css';
 import TablaDocumento from "../components/TablaDocumento.jsx";
 
