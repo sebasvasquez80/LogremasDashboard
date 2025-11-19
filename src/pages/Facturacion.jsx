@@ -3,7 +3,11 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 // Importamos el componente de gráfico
-import GraficoUtilidad from '../components/GraficoUtilidad'; 
+import GraficoUtilidad from '../components/GraficoUtilidad';
+import GraficoPersonas from '../components/GraficoPersonas';
+import GraficoFacturacion from '../components/GraficoFacturacion';
+import GraficoNomina from '../components/GraficoNomina';
+import GraficoGastos from '../components/GraficoGastos';
 
 function Facturacion() {
     // --- Estados Originales ---
@@ -11,11 +15,13 @@ function Facturacion() {
     const [cargando, setCargando] = useState(true);
     const [usuario, setUsuario] = useState(null);
 
-    // --- NUEVOS ESTADOS PARA FILTROS ---
-    const [centros, setCentros] = useState([]); 
+    // --- NUEVOS ESTADOS PARA FILTROS DE RANGO ---
+    const [centros, setCentros] = useState([]);
     const [selectedCentro, setSelectedCentro] = useState('');
     const [selectedAno, setSelectedAno] = useState(new Date().getFullYear());
-    const [selectedMes, setSelectedMes] = useState(''); 
+    // CAMBIO: Ahora son dos estados, inicializados en Enero (1) y Diciembre (12)
+    const [selectedMesInicio, setSelectedMesInicio] = useState('1');
+    const [selectedMesFin, setSelectedMesFin] = useState('12');
 
     const esAdmin = usuario && usuario.rol === 'Administracion';
     const documentosVisibles = documentos.filter(doc => {
@@ -30,7 +36,6 @@ function Facturacion() {
     };
 
     const meses = [
-        { valor: '', nombre: 'Todos los Meses' },
         { valor: 1, nombre: 'Enero' }, { valor: 2, nombre: 'Febrero' },
         { valor: 3, nombre: 'Marzo' }, { valor: 4, nombre: 'Abril' },
         { valor: 5, nombre: 'Mayo' }, { valor: 6, nombre: 'Junio' },
@@ -68,7 +73,7 @@ function Facturacion() {
 
         fetchDocuments();
     }, []);
-    
+
     // --- EFECTO 2: Cargar la lista de Centros ---
     useEffect(() => {
         const fetchCentros = async () => {
@@ -77,9 +82,6 @@ function Facturacion() {
                 if (!token) return;
 
                 const apiUrl = import.meta.env.VITE_API_URL;
-
-                // NOTA: Si tu ruta es /api/centros, y tu app principal usa /api, tu montaje en Express debería ser: app.use('/api', router);
-                // Si la ruta es /api/graficos/centros, entonces el montaje en Express es: app.use('/api/graficos', router);
                 const { data } = await axios.get(
                     `${apiUrl}/api/graficos/centros`, 
                     {
@@ -89,10 +91,8 @@ function Facturacion() {
                 
                 if (Array.isArray(data)) {
                     setCentros(data);
-                    if (data.length > 0) {
-                        // Seleccionar el primer centro (id) por defecto
-                        setSelectedCentro(data[0].id);
-                    }
+                    // IMPORTANTE: ELIMINAMOS LA LÍNEA QUE SELECCIONABA EL PRIMER CENTRO
+                    // setSelectedCentro(data[0].id); 
                 }
             } catch (err) {
                 console.error("Error cargando centros en Facturacion:", err);
@@ -103,25 +103,25 @@ function Facturacion() {
 
     // --- Renderizado ---
     return (
+        // Añadí un padding al contenedor principal para que no se pegue a los bordes
         <div style={{ padding: '20px', maxWidth: '1200px', margin: 'auto' }}>
             <h1>Facturación</h1>
 
             {/* --- SECCIÓN DE FILTROS --- */}
-            {/* Usamos la clase 'filter-container' del CSS */}
             <div className="filter-container">
-                
+
                 {/* Filtro de Centros */}
                 <div className="filter-group">
                     <label className="filter-label" htmlFor="select-centro">Centro:</label>
-                    <select 
+                    <select
                         id="select-centro"
                         className="filter-input"
-                        value={selectedCentro} 
+                        value={selectedCentro}
                         onChange={(e) => setSelectedCentro(e.target.value)}
                     >
-                        <option value="">Centro</option>
+                        <option value="">Elegir centro</option>
                         {Array.isArray(centros) && centros.map(centro => (
-                            <option key={centro.id} value={centro.id}>{centro.nombre}</option> 
+                            <option key={centro.id} value={centro.id}>{centro.nombre}</option>
                         ))}
                     </select>
                 </div>
@@ -129,10 +129,10 @@ function Facturacion() {
                 {/* Filtro de Año */}
                 <div className="filter-group">
                     <label className="filter-label" htmlFor="select-ano">Año:</label>
-                    <select 
+                    <select
                         id="select-ano"
                         className="filter-input"
-                        value={selectedAno} 
+                        value={selectedAno}
                         onChange={(e) => setSelectedAno(e.target.value)}
                     >
                         {getAnos().map(ano => (
@@ -140,36 +140,99 @@ function Facturacion() {
                         ))}
                     </select>
                 </div>
-                
-                {/* Filtro de Mes */}
+
+                {/* Filtro de Mes INICIO */}
                 <div className="filter-group">
-                    <label className="filter-label" htmlFor="select-mes">Mes:</label>
-                    <select 
-                        id="select-mes"
+                    <label className="filter-label" htmlFor="select-mes-inicio">Desde Mes:</label>
+                    <select
+                        id="select-mes-inicio"
                         className="filter-input"
-                        value={selectedMes} 
-                        onChange={(e) => setSelectedMes(e.target.value)}
+                        value={selectedMesInicio}
+                        onChange={(e) => setSelectedMesInicio(e.target.value)}
                     >
                         {meses.map(mes => (
-                            <option key={mes.valor} value={mes.valor}>{mes.nombre}</option>
+                            // El valor es el número del mes (1 a 12)
+                            <option key={`inicio-${mes.valor}`} value={mes.valor}>{mes.nombre}</option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* Filtro de Mes FIN */}
+                <div className="filter-group">
+                    <label className="filter-label" htmlFor="select-mes-fin">Hasta Mes:</label>
+                    <select
+                        id="select-mes-fin"
+                        className="filter-input"
+                        value={selectedMesFin}
+                        onChange={(e) => setSelectedMesFin(e.target.value)}
+                    >
+                        {meses.map(mes => (
+                            // El valor es el número del mes (1 a 12)
+                            <option key={`fin-${mes.valor}`} value={mes.valor}>{mes.nombre}</option>
                         ))}
                     </select>
                 </div>
             </div>
 
             {/* --- SECCIÓN DEL GRÁFICO --- */}
-            {/* Usamos la clase 'grafico-container' del CSS */}
             <div className="grafico-container">
                 <h2>Análisis de Utilidad Mensual</h2>
-                {/* PASAMOS LOS ESTADOS COMO PROPS AL HIJO */}
-                <GraficoUtilidad 
+                {/* PASAMOS LOS ESTADOS DE RANGO COMO PROPS */}
+                <GraficoUtilidad
                     centroId={selectedCentro}
                     ano={selectedAno}
-                    mes={selectedMes}
+                    mesInicio={selectedMesInicio}
+                    mesFin={selectedMesFin}
                 />
             </div>
 
-            {/* --- SECCIÓN DE DOCUMENTOS ---
+            {/* Gráfico 2: Personas (NUEVO) */}
+            <div className="grafico-container">
+                <h2>Cantidad de Personas</h2>
+                <GraficoPersonas
+                    centroId={selectedCentro}
+                    ano={selectedAno}
+                    mesInicio={selectedMesInicio}
+                    mesFin={selectedMesFin}
+                />
+            </div>
+
+            {/* Gráfico 1: Facturación (NUEVO) */}
+            <div className="grafico-container">
+                <h2>Facturación Mensual</h2>
+                <GraficoFacturacion
+                    centroId={selectedCentro}
+                    ano={selectedAno}
+                    mesInicio={selectedMesInicio}
+                    mesFin={selectedMesFin}
+                />
+            </div>
+
+            {/* Gráfico 2: Nómina (NUEVO) */}
+            <div className="grafico-container">
+                <h2>Costo de Nómina Mensual</h2>
+                <GraficoNomina
+                    centroId={selectedCentro}
+                    ano={selectedAno}
+                    mesInicio={selectedMesInicio}
+                    mesFin={selectedMesFin}
+                />
+            </div>
+
+
+            {/* Gráfico 2: Gastos (NUEVO) */}
+            <div className="grafico-container">
+                <h2>Composición de Gastos</h2>
+                <GraficoGastos
+                    centroId={selectedCentro}
+                    ano={selectedAno}
+                    mesInicio={selectedMesInicio}
+                    mesFin={selectedMesFin}
+                />
+            </div>
+
+
+            {/* --- SECCIÓN DE DOCUMENTOS (Tu código original) ---
             {cargando ? (
                 <p>Cargando documentos...</p>
             ) : (
@@ -178,7 +241,7 @@ function Facturacion() {
                     <div className="documentos-grid">
                         {documentosVisibles.length > 0 ? (
                             documentosVisibles.map(doc => (
-                                <a key={doc.id} href={doc.url} target="_blank" rel="noopener noreferrer" className="indicadores-links">
+                                <a key={doc.id} href={doc.url} target="_blank" rel="noopener noreferrer" className="gestion-links">
                                     <p>{doc.nombre}</p>
                                 </a>
                             ))

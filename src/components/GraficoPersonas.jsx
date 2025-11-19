@@ -13,6 +13,7 @@ import {
 } from 'chart.js';
 import DatalabelsPlugin from 'chartjs-plugin-datalabels';
 
+
 // 1. Registrar los componentes de Chart.js
 ChartJS.register(
     CategoryScale,
@@ -25,74 +26,78 @@ ChartJS.register(
     DatalabelsPlugin
 );
 
-// Opciones de Chart.js para formatear los porcentajes
+// Opciones de Chart.js (movidas aquí)
 const options = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
         legend: { position: 'top' },
-        title: { display: true, text: `Utilidad Mensual` },
+        title: { display: true, text: `Cantidad de Personal` },
         tooltip: {
             callbacks: {
                 label: function (context) {
                     let label = context.dataset.label || '';
                     if (label) { label += ': '; }
                     if (context.parsed.y !== null) {
-                        label += (context.parsed.y * 100).toFixed(2) + ' %';
+                        // Formato de número entero sin decimales para personas
+                        label += new Intl.NumberFormat('es-CO').format(context.parsed.y);
                     }
                     return label;
                 }
             }
         },
-
         datalabels: {
             align: 'top', // Posición encima del punto
             formatter: (value) => {
-                // Multiplica el valor (ej: 0.08) por 100 y añade el signo %
-                return (value * 100).toFixed(1) + '%';
+                // CORRECCIÓN: Formatear el valor como número entero con separador de miles
+                // (Ej: 1500 -> 1.500)
+                return new Intl.NumberFormat('es-CO', {
+                    maximumFractionDigits: 0
+                }).format(value);
             },
             color: '#333', // Color de la etiqueta
             font: {
                 weight: 'bold'
+            },
+            // Aseguramos que la etiqueta no se muestre si el valor es 0 o null
+            display: (context) => {
+                return context.dataset.data[context.dataIndex] !== 0;
             }
         }
 
     },
-    // CORRECCIÓN: Añadir padding inferior al layout general del gráfico
     layout: {
         padding: {
-            bottom: 30, // Da 30px extra en la parte inferior para las etiquetas
+            bottom: 30, // Espacio para las etiquetas rotadas
         }
     },
     scales: {
         y: {
             ticks: {
                 callback: function (value) {
-                    return (value * 100).toFixed(0) + ' %';
+                    // Muestra el valor como un número entero
+                    return new Intl.NumberFormat('es-CO').format(value);
                 }
             }
         },
         x: {
-            // CORRECCIÓN PARA ROTAR LAS ETIQUETAS Y HACERLAS VISIBLES
             ticks: {
-                maxRotation: 45, // Rotación máxima de 45 grados
-                minRotation: 45, // Rotación mínima de 45 grados
-                autoSkip: false, // Forzar a Chart.js a mostrar todas las etiquetas
+                maxRotation: 45,
+                minRotation: 45,
+                autoSkip: false,
             }
         }
     }
 };
 
 // --- Componente Principal ---
-const GraficoUtilidad = ({ centroId, ano, mesInicio, mesFin }) => {
+const GraficoPersonas = ({ centroId, ano, mesInicio, mesFin }) => {
 
     const [chartData, setChartData] = useState({ datasets: [] });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Efecto: Cargar los datos del gráfico
     useEffect(() => {
-        // Validación: Detener la carga si faltan los filtros obligatorios
         if (!centroId || !ano || !mesInicio || !mesFin) {
             setChartData({ datasets: [] });
             setError("Seleccione un Centro, Año y Rango de Meses.");
@@ -112,40 +117,33 @@ const GraficoUtilidad = ({ centroId, ano, mesInicio, mesFin }) => {
                 }
 
                 const apiUrl = import.meta.env.VITE_API_URL;
+                const params = { centroId, ano, mesInicio, mesFin };
 
-                // Construimos los parámetros con las props
-                const params = {
-                    centroId: centroId,
-                    ano: ano,
-                    mesInicio: mesInicio,
-                    mesFin: mesFin,
-                };
-
-                // Llamada al backend con el token
+                // Llamada al endpoint de PERSONAS
                 const response = await axios.get(
-                    `${apiUrl}/api/graficos/utilidad`,
+                    `${apiUrl}/api/graficos/personas`,
                     {
                         params: params,
                         headers: { Authorization: `Bearer ${token}` }
                     }
                 );
 
-                // --- TRANSFORMACIÓN DE DATOS ---
-                const rawData = response.data;
+                const rawData = response.data; // Datos puros: [ { fecha_label: 'Ene', personas_valor: 50 }, ... ]
 
+                // 2. TRANSFORMACIÓN EN EL FRONTEND
                 const labels = rawData.map(item => item.fecha_label);
-                const valores = rawData.map(item => item.utilidad_valor);
+                const valores = rawData.map(item => item.personas_valor);
 
                 const finalChartData = {
                     labels: labels,
                     datasets: [
                         {
-                            label: 'Utilidad',
+                            label: 'Cantidad de Personas',
                             data: valores,
-                            fill: false,
-                            borderColor: 'rgb(54, 162, 235)',
-                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                            tension: 0.1
+                            fill: true, // Estilos movidos aquí
+                            borderColor: 'rgb(255, 99, 132)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.4)',
+                            tension: 0
                         }
                     ]
                 };
@@ -156,23 +154,17 @@ const GraficoUtilidad = ({ centroId, ano, mesInicio, mesFin }) => {
                 }
 
             } catch (err) {
-                console.error("Error cargando datos del gráfico:", err);
-                if (err.response && err.response.data && err.response.data.message) {
-                    setError(`Error: ${err.response.data.message}`);
-                } else {
-                    setError('Error al cargar datos del gráfico.');
-                }
+                console.error("Error cargando datos del gráfico de personas:", err);
+                setError('Error al cargar datos del gráfico de personas.');
             } finally {
                 setLoading(false);
             }
         };
 
         fetchChartData();
-    }, [centroId, ano, mesInicio, mesFin]); // Depende solo de las props
+    }, [centroId, ano, mesInicio, mesFin]);
 
-    // --- Renderizado (JSX) ---
     return (
-        // Usamos la clase chart-wrapper para el arreglo de desborde
         <div className="chart-wrapper">
             {loading && <p>Cargando gráfico...</p>}
             {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -185,4 +177,4 @@ const GraficoUtilidad = ({ centroId, ano, mesInicio, mesFin }) => {
     );
 };
 
-export default GraficoUtilidad;
+export default GraficoPersonas;

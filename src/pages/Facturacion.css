@@ -65,6 +65,7 @@ h2 {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    /* Estiliza la flecha del select */
     background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236c757d%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.2-6.5H18.8c-5.5%200-10.9%202.2-14.8%206.5-7.7%208.5-7.7%2022.4%200%2030.9l127.3%20127.9c4.2%204.2%209.6%206.5%2014.8%206.5s10.6-2.3%2014.8-6.5L287%20100.3c7.7-8.5%207.7-22.4%200-30.9z%22%2F%3E%3C%2Fsvg%3E');
     background-repeat: no-repeat;
     background-position: right 10px top 50%;
@@ -78,7 +79,7 @@ h2 {
 }
 
 /* -------------------------------------- */
-/* SECCIÓN GRÁFICO */
+/* SECCIÓN GRÁFICO (Solución al Desborde) */
 /* -------------------------------------- */
 
 .grafico-container {
@@ -88,7 +89,18 @@ h2 {
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
     margin-bottom: 40px;
+    
+    /* CORRECCIÓN DE DESBORDE: El contenedor principal maneja el scroll */
+    overflow-x: auto; 
+    overflow-y: hidden;
 }
+
+/* El div interno que contiene el Canvas de Chart.js */
+.chart-wrapper {
+    min-width: 800px; /* Ancho mínimo para que se pueda hacer scroll horizontalmente si hay muchos puntos */
+    height: 100%;
+}
+
 
 /* -------------------------------------- */
 /* SECCIÓN DOCUMENTOS (Tarjetas) */
