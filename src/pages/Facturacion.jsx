@@ -16,6 +16,8 @@ function Facturacion() {
     const [usuario, setUsuario] = useState(null);
 
     // --- NUEVOS ESTADOS PARA FILTROS DE RANGO ---
+    const [contratos, setContratos] = useState([]); // Nueva lista de contratos
+    const [selectedContrato, setSelectedContrato] = useState(''); // Nuevo estado de filtro
     const [centros, setCentros] = useState([]);
     const [selectedCentro, setSelectedCentro] = useState('');
     const [selectedAno, setSelectedAno] = useState(new Date().getFullYear());
@@ -74,32 +76,64 @@ function Facturacion() {
         fetchDocuments();
     }, []);
 
-    // --- EFECTO 2: Cargar la lista de Centros ---
     useEffect(() => {
-        const fetchCentros = async () => {
+        const fetchContratos = async () => {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) return;
 
                 const apiUrl = import.meta.env.VITE_API_URL;
                 const { data } = await axios.get(
+                    `${apiUrl}/api/graficos/contratos`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` }
+                    }
+                );
+
+                if (Array.isArray(data)) {
+                    setContratos(data);
+                    // No seleccionamos un contrato por defecto
+                }
+            } catch (err) {
+                console.error("Error cargando contratos en Facturacion:", err);
+            }
+        };
+        fetchContratos();
+    }, []);
+    // --- EFECTO 3: Cargar la lista de Centros ---
+    useEffect(() => {
+        const fetchCentros = async () => {
+            setCentros([]); // Limpiar centros al cambiar contrato
+            setSelectedCentro(''); // Restablecer centro seleccionado
+
+            // Si no hay contrato seleccionado, no cargamos nada más que la lista vacía
+            if (!selectedContrato) return; 
+
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) return;
+
+                const apiUrl = import.meta.env.VITE_API_URL;
+                const params = { contratoId: selectedContrato };
+
+                const { data } = await axios.get(
                     `${apiUrl}/api/graficos/centros`, 
                     {
+                        params: params, // Enviamos el filtro del contrato
                         headers: { Authorization: `Bearer ${token}` }
                     }
                 );
                 
                 if (Array.isArray(data)) {
                     setCentros(data);
-                    // IMPORTANTE: ELIMINAMOS LA LÍNEA QUE SELECCIONABA EL PRIMER CENTRO
-                    // setSelectedCentro(data[0].id); 
+                    // No seleccionamos un centro por defecto, forzamos la selección manual
                 }
             } catch (err) {
                 console.error("Error cargando centros en Facturacion:", err);
             }
         };
         fetchCentros();
-    }, []); 
+    }, [selectedContrato]); // Se re-ejecuta cada vez que el contrato cambia
 
     // --- Renderizado ---
     return (
@@ -110,18 +144,40 @@ function Facturacion() {
             {/* --- SECCIÓN DE FILTROS --- */}
             <div className="filter-container">
 
+                <div className="filter-group">
+                    <label className="filter-label" htmlFor="select-contrato">Empresa (Contrato):</label>
+                    <select 
+                        id="select-contrato"
+                        className="filter-input"
+                        value={selectedContrato} 
+                        onChange={(e) => {
+                            setSelectedContrato(e.target.value);
+                            setSelectedCentro(''); // Limpiar centro al cambiar contrato
+                        }}
+                    >
+                        <option value="">Elegir Contrato</option>
+                        {Array.isArray(contratos) && contratos.map(contrato => (
+                            <option key={contrato.id} value={contrato.id}>{contrato.nombre}</option> 
+                        ))}
+                    </select>
+                </div>
+
                 {/* Filtro de Centros */}
                 <div className="filter-group">
                     <label className="filter-label" htmlFor="select-centro">Centro:</label>
-                    <select
+                    <select 
                         id="select-centro"
                         className="filter-input"
-                        value={selectedCentro}
+                        value={selectedCentro} 
                         onChange={(e) => setSelectedCentro(e.target.value)}
+                        // Deshabilitar si no hay un contrato seleccionado
+                        disabled={!selectedContrato || centros.length === 0}
                     >
-                        <option value="">Elegir centro</option>
+                        <option value="">
+                            {selectedContrato ? 'Elegir centro' : 'Seleccione Contrato primero'}
+                        </option> 
                         {Array.isArray(centros) && centros.map(centro => (
-                            <option key={centro.id} value={centro.id}>{centro.nombre}</option>
+                            <option key={centro.id} value={centro.id}>{centro.nombre}</option> 
                         ))}
                     </select>
                 </div>
