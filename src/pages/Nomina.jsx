@@ -1,28 +1,26 @@
-import './Facturacion.css';
+import './Nomina.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-// Importamos el componente de gráfico
-import GraficoUtilidad from '../components/GraficoUtilidad';
-import GraficoPersonas from '../components/GraficoPersonas';
-import GraficoFacturacion from '../components/GraficoFacturacion';
-import GraficoNomina from '../components/GraficoNomina';
-import GraficoGastos from '../components/GraficoGastos';
-import { NavLink } from 'react-router-dom';
 
-function Facturacion() {
-    // --- Estados Originales ---
+// Importamos el componente del gráfico de Nómina
+import GraficoSalarioTransporte from '../components/GraficoSalarioTransporte'; 
+import GraficoNovedades from '../components/GraficoNovedades';
+
+function Nomina() {
+    // --- Estados para Documentos y Usuario (Mantenidos) ---
     const [documentos, setDocumentos] = useState([]);
     const [cargando, setCargando] = useState(true);
     const [usuario, setUsuario] = useState(null);
 
-    // --- NUEVOS ESTADOS PARA FILTROS DE RANGO ---
-    const [contratos, setContratos] = useState([]); // Nueva lista de contratos
-    const [selectedContrato, setSelectedContrato] = useState(''); // Nuevo estado de filtro
-    const [centros, setCentros] = useState([]);
-    const [selectedCentro, setSelectedCentro] = useState('');
+    // --- ESTADOS PARA FILTROS DE NÓMINA (NUEVOS) ---
+    const [contratos, setContratos] = useState([]); 
+    const [selectedContrato, setSelectedContrato] = useState(''); 
+    // Usamos 'centrosNomina' para distinguirlos de los centros de Facturación
+    const [centrosNomina, setCentrosNomina] = useState([]); 
+    const [selectedCentroNomina, setSelectedCentroNomina] = useState(''); // ID del centro_nomina
+    
     const [selectedAno, setSelectedAno] = useState(new Date().getFullYear());
-    // CAMBIO: Ahora son dos estados, inicializados en Enero (1) y Diciembre (12)
     const [selectedMesInicio, setSelectedMesInicio] = useState('1');
     const [selectedMesFin, setSelectedMesFin] = useState('12');
 
@@ -47,7 +45,7 @@ function Facturacion() {
         { valor: 11, nombre: 'Noviembre' }, { valor: 12, nombre: 'Diciembre' }
     ];
 
-    // --- EFECTO 1: Cargar Usuario y Documentos (Tu código original) ---
+    // --- EFECTO 1: Cargar Usuario y Documentos ---
     useEffect(() => {
         const usuarioString = localStorage.getItem('user');
         if (usuarioString) {
@@ -62,12 +60,13 @@ function Facturacion() {
                     return;
                 }
                 const apiUrl = import.meta.env.VITE_API_URL;
-                const response = await axios.get(`${apiUrl}/api/documentos?id_pagina=4`, {
+                // Usamos id_pagina=1 como en tu código original
+                const response = await axios.get(`${apiUrl}/api/documentos?id_pagina=1`, { 
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setDocumentos(response.data);
             } catch (error) {
-                console.error("Error al obtener documentos de planeación:", error);
+                console.error("Error al obtener documentos de nómina:", error);
                 Swal.fire('Error', 'No se pudieron cargar los documentos.', 'error');
             } finally {
                 setCargando(false);
@@ -77,6 +76,7 @@ function Facturacion() {
         fetchDocuments();
     }, []);
 
+    // --- EFECTO 2: Cargar la lista de Contratos (Compartido con Facturación) ---
     useEffect(() => {
         const fetchContratos = async () => {
             try {
@@ -85,30 +85,30 @@ function Facturacion() {
 
                 const apiUrl = import.meta.env.VITE_API_URL;
                 const { data } = await axios.get(
-                    `${apiUrl}/api/graficos/contratos`,
+                    `${apiUrl}/api/graficos/contratos`, 
                     {
                         headers: { Authorization: `Bearer ${token}` }
                     }
                 );
-
+                
                 if (Array.isArray(data)) {
                     setContratos(data);
-                    // No seleccionamos un contrato por defecto
                 }
             } catch (err) {
-                console.error("Error cargando contratos en Facturacion:", err);
+                console.error("Error cargando contratos en Nomina:", err);
             }
         };
         fetchContratos();
-    }, []);
-    // --- EFECTO 3: Cargar la lista de Centros ---
-    useEffect(() => {
-        const fetchCentros = async () => {
-            setCentros([]); // Limpiar centros al cambiar contrato
-            setSelectedCentro(''); // Restablecer centro seleccionado
+    }, []); 
 
-            // Si no hay contrato seleccionado, no cargamos nada más que la lista vacía
-            if (!selectedContrato) return;
+    // --- EFECTO 3: Cargar Centros de Nómina (Depende del Contrato) ---
+    useEffect(() => {
+        const fetchCentrosNomina = async () => {
+            setCentrosNomina([]); // Limpiar centros al cambiar contrato
+            setSelectedCentroNomina(''); // Restablecer centro seleccionado
+
+            // Si no hay contrato seleccionado, no cargamos nada
+            if (!selectedContrato) return; 
 
             try {
                 const token = localStorage.getItem('token');
@@ -117,78 +117,67 @@ function Facturacion() {
                 const apiUrl = import.meta.env.VITE_API_URL;
                 const params = { contratoId: selectedContrato };
 
+                // Llamada al nuevo endpoint de Centros de Nómina
                 const { data } = await axios.get(
-                    `${apiUrl}/api/graficos/centros`,
+                    `${apiUrl}/api/graficos/centros-nomina`, 
                     {
-                        params: params, // Enviamos el filtro del contrato
+                        params: params, // Filtro por Contrato
                         headers: { Authorization: `Bearer ${token}` }
                     }
                 );
-
+                
                 if (Array.isArray(data)) {
-                    setCentros(data);
-                    // No seleccionamos un centro por defecto, forzamos la selección manual
+                    setCentrosNomina(data);
                 }
             } catch (err) {
-                console.error("Error cargando centros en Facturacion:", err);
+                console.error("Error cargando centros de nómina:", err);
             }
         };
-        fetchCentros();
+        fetchCentrosNomina();
     }, [selectedContrato]); // Se re-ejecuta cada vez que el contrato cambia
 
-    // --- Renderizado ---
-    return (
-        // Añadí un padding al contenedor principal para que no se pegue a los bordes
+    return ( 
         <div style={{ padding: '20px', maxWidth: '1200px', margin: 'auto' }}>
-            <h1>Facturación</h1>
-
-            <div className="nav-button-container">
-                <NavLink to="/nomina">
-                    <button
-                        className="nav-button"
-                    >
-                        Nomina
-                    </button>
-                </NavLink>
-            </div>
+            <h1>Informes de Nómina</h1>
 
             {/* --- SECCIÓN DE FILTROS --- */}
             <div className="filter-container">
-
+                
+                {/* Filtro 1: Contrato (Empresa) */}
                 <div className="filter-group">
                     <label className="filter-label" htmlFor="select-contrato">Empresa (Contrato):</label>
-                    <select
+                    <select 
                         id="select-contrato"
                         className="filter-input"
-                        value={selectedContrato}
+                        value={selectedContrato} 
                         onChange={(e) => {
                             setSelectedContrato(e.target.value);
-                            setSelectedCentro(''); // Limpiar centro al cambiar contrato
+                            setSelectedCentroNomina(''); // Limpiar centro al cambiar contrato
                         }}
                     >
                         <option value="">Elegir Contrato</option>
                         {Array.isArray(contratos) && contratos.map(contrato => (
-                            <option key={contrato.id} value={contrato.id}>{contrato.nombre}</option>
+                            <option key={contrato.id} value={contrato.id}>{contrato.nombre}</option> 
                         ))}
                     </select>
                 </div>
-
-                {/* Filtro de Centros */}
+                
+                {/* Filtro 2: Centro de Nómina (DEPENDIENTE) */}
                 <div className="filter-group">
-                    <label className="filter-label" htmlFor="select-centro">Centro:</label>
-                    <select
-                        id="select-centro"
+                    <label className="filter-label" htmlFor="select-centro-nomina">Centro de Nómina:</label>
+                    <select 
+                        id="select-centro-nomina"
                         className="filter-input"
-                        value={selectedCentro}
-                        onChange={(e) => setSelectedCentro(e.target.value)}
-                        // Deshabilitar si no hay un contrato seleccionado
-                        disabled={!selectedContrato || centros.length === 0}
+                        value={selectedCentroNomina} 
+                        onChange={(e) => setSelectedCentroNomina(e.target.value)}
+                        disabled={!selectedContrato || centrosNomina.length === 0}
                     >
                         <option value="">
                             {selectedContrato ? 'Elegir centro' : 'Seleccione Contrato primero'}
-                        </option>
-                        {Array.isArray(centros) && centros.map(centro => (
-                            <option key={centro.id} value={centro.id}>{centro.nombre}</option>
+                        </option> 
+                        {Array.isArray(centrosNomina) && centrosNomina.map(centro => (
+                            // Usamos centro.id como valor
+                            <option key={centro.id} value={centro.id}>{centro.nombre}</option> 
                         ))}
                     </select>
                 </div>
@@ -218,7 +207,6 @@ function Facturacion() {
                         onChange={(e) => setSelectedMesInicio(e.target.value)}
                     >
                         {meses.map(mes => (
-                            // El valor es el número del mes (1 a 12)
                             <option key={`inicio-${mes.valor}`} value={mes.valor}>{mes.nombre}</option>
                         ))}
                     </select>
@@ -234,72 +222,37 @@ function Facturacion() {
                         onChange={(e) => setSelectedMesFin(e.target.value)}
                     >
                         {meses.map(mes => (
-                            // El valor es el número del mes (1 a 12)
                             <option key={`fin-${mes.valor}`} value={mes.valor}>{mes.nombre}</option>
                         ))}
                     </select>
                 </div>
             </div>
 
-            {/* --- SECCIÓN DEL GRÁFICO --- */}
-            <div className="grafico-container">
-                <h2>Análisis de Utilidad Mensual</h2>
-                {/* PASAMOS LOS ESTADOS DE RANGO COMO PROPS */}
-                <GraficoUtilidad
-                    centroId={selectedCentro}
-                    ano={selectedAno}
-                    mesInicio={selectedMesInicio}
-                    mesFin={selectedMesFin}
-                />
+            {/* --- SECCIÓN DE GRÁFICOS --- */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '30px', marginBottom: '40px' }}>
+                
+                <div className="grafico-container">
+                    <h2>Reporte salarial</h2>
+                    <GraficoSalarioTransporte 
+                        centroId={selectedCentroNomina} // Usamos el ID del Centro de Nómina
+                        ano={selectedAno}
+                        mesInicio={selectedMesInicio}
+                        mesFin={selectedMesFin}
+                    />
+                </div>
+
+                <div className="grafico-container">
+                    <h2>Reporte novedades</h2>
+                    <GraficoNovedades
+                        centroId={selectedCentroNomina} // Usamos el ID del Centro de Nómina
+                        ano={selectedAno}
+                        mesInicio={selectedMesInicio}
+                        mesFin={selectedMesFin}
+                    />
+                </div>
             </div>
 
-            {/* Gráfico 2: Personas (NUEVO) */}
-            <div className="grafico-container">
-                <h2>Cantidad de Personas</h2>
-                <GraficoPersonas
-                    centroId={selectedCentro}
-                    ano={selectedAno}
-                    mesInicio={selectedMesInicio}
-                    mesFin={selectedMesFin}
-                />
-            </div>
-
-            {/* Gráfico 1: Facturación (NUEVO) */}
-            <div className="grafico-container">
-                <h2>Facturación Mensual</h2>
-                <GraficoFacturacion
-                    centroId={selectedCentro}
-                    ano={selectedAno}
-                    mesInicio={selectedMesInicio}
-                    mesFin={selectedMesFin}
-                />
-            </div>
-
-            {/* Gráfico 2: Nómina (NUEVO) */}
-            <div className="grafico-container">
-                <h2>Costo de Nómina Mensual</h2>
-                <GraficoNomina
-                    centroId={selectedCentro}
-                    ano={selectedAno}
-                    mesInicio={selectedMesInicio}
-                    mesFin={selectedMesFin}
-                />
-            </div>
-
-
-            {/* Gráfico 2: Gastos (NUEVO) */}
-            <div className="grafico-container">
-                <h2>Composición de Gastos</h2>
-                <GraficoGastos
-                    centroId={selectedCentro}
-                    ano={selectedAno}
-                    mesInicio={selectedMesInicio}
-                    mesFin={selectedMesFin}
-                />
-            </div>
-
-
-            {/* --- SECCIÓN DE DOCUMENTOS (Tu código original) ---
+            {/* --- SECCIÓN DE DOCUMENTOS (Implementación completa) ---
             {cargando ? (
                 <p>Cargando documentos...</p>
             ) : (
@@ -319,7 +272,7 @@ function Facturacion() {
                 </div>
             )} */}
         </div>
-    );
+    )
 }
 
-export default Facturacion;
+export default Nomina;

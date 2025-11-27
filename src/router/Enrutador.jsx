@@ -11,6 +11,7 @@ import Informacion from '../pages/Informacion.jsx';
 import CambiarContrasena from '../pages/CambiarContrasena.jsx';
 import Facturacion from '../pages/Facturacion.jsx';
 import ProtegerRuta from '../helpers/ProtegerRuta.jsx';
+import Nomina from '../pages/Nomina.jsx';
 
 export let Enrutador = [
     {
@@ -56,5 +57,9 @@ export let Enrutador = [
     {
     path: '/facturacion',
     element: <ProtegerRuta> <PageLayout><Facturacion/></PageLayout> </ProtegerRuta>
+    },
+    {
+    path: '/nomina',
+    element: <ProtegerRuta> <PageLayout><Nomina/></PageLayout> </ProtegerRuta>
     }
 ]
