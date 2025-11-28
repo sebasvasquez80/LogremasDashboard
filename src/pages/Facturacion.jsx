@@ -252,11 +252,11 @@ function Facturacion() {
                     mesFin={selectedMesFin}
                 />
             </div>
-
-            {/* Gráfico 2: Personas (NUEVO) */}
+            
+            {/* Gráfico 1: Facturación (NUEVO) */}
             <div className="grafico-container">
-                <h2>Cantidad de Personas</h2>
-                <GraficoPersonas
+                <h2>Facturación Mensual</h2>
+                <GraficoFacturacion
                     centroId={selectedCentro}
                     ano={selectedAno}
                     mesInicio={selectedMesInicio}
@@ -264,10 +264,10 @@ function Facturacion() {
                 />
             </div>
 
-            {/* Gráfico 1: Facturación (NUEVO) */}
+            {/* Gráfico 2: Personas (NUEVO) */}
             <div className="grafico-container">
-                <h2>Facturación Mensual</h2>
-                <GraficoFacturacion
+                <h2>Cantidad de Personas</h2>
+                <GraficoPersonas
                     centroId={selectedCentro}
                     ano={selectedAno}
                     mesInicio={selectedMesInicio}
@@ -285,6 +285,8 @@ function Facturacion() {
                     mesFin={selectedMesFin}
                 />
             </div>
+
+
 
 
             {/* Gráfico 2: Gastos (NUEVO) */}

@@ -3,23 +3,22 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-// Importamos el componente del gráfico de Nómina
+// Importamos los componentes de gráfico de Nómina
 import GraficoSalarioTransporte from '../components/GraficoSalarioTransporte'; 
-import GraficoNovedades from '../components/GraficoNovedades';
+import GraficoNovedades from '../components/GraficoNovedades'; 
+import GraficoTortaNovedades from '../components/GraficoTortaNovedades'; 
+// IMPORTACIÓN: Gráfico de Personas
+import GraficoPersonas from '../components/GraficoPersonas'; 
 
 function Nomina() {
-    // --- Estados para Documentos y Usuario (Mantenidos) ---
+    // --- ESTADOS ---
     const [documentos, setDocumentos] = useState([]);
     const [cargando, setCargando] = useState(true);
     const [usuario, setUsuario] = useState(null);
-
-    // --- ESTADOS PARA FILTROS DE NÓMINA (NUEVOS) ---
     const [contratos, setContratos] = useState([]); 
     const [selectedContrato, setSelectedContrato] = useState(''); 
-    // Usamos 'centrosNomina' para distinguirlos de los centros de Facturación
     const [centrosNomina, setCentrosNomina] = useState([]); 
-    const [selectedCentroNomina, setSelectedCentroNomina] = useState(''); // ID del centro_nomina
-    
+    const [selectedCentroNomina, setSelectedCentroNomina] = useState(''); 
     const [selectedAno, setSelectedAno] = useState(new Date().getFullYear());
     const [selectedMesInicio, setSelectedMesInicio] = useState('1');
     const [selectedMesFin, setSelectedMesFin] = useState('12');
@@ -60,7 +59,6 @@ function Nomina() {
                     return;
                 }
                 const apiUrl = import.meta.env.VITE_API_URL;
-                // Usamos id_pagina=1 como en tu código original
                 const response = await axios.get(`${apiUrl}/api/documentos?id_pagina=1`, { 
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -76,7 +74,7 @@ function Nomina() {
         fetchDocuments();
     }, []);
 
-    // --- EFECTO 2: Cargar la lista de Contratos (Compartido con Facturación) ---
+    // --- EFECTO 2: Cargar la lista de Contratos ---
     useEffect(() => {
         const fetchContratos = async () => {
             try {
@@ -104,10 +102,9 @@ function Nomina() {
     // --- EFECTO 3: Cargar Centros de Nómina (Depende del Contrato) ---
     useEffect(() => {
         const fetchCentrosNomina = async () => {
-            setCentrosNomina([]); // Limpiar centros al cambiar contrato
-            setSelectedCentroNomina(''); // Restablecer centro seleccionado
+            setCentrosNomina([]); 
+            setSelectedCentroNomina(''); 
 
-            // Si no hay contrato seleccionado, no cargamos nada
             if (!selectedContrato) return; 
 
             try {
@@ -117,7 +114,6 @@ function Nomina() {
                 const apiUrl = import.meta.env.VITE_API_URL;
                 const params = { contratoId: selectedContrato };
 
-                // Llamada al nuevo endpoint de Centros de Nómina
                 const { data } = await axios.get(
                     `${apiUrl}/api/graficos/centros-nomina`, 
                     {
@@ -134,7 +130,7 @@ function Nomina() {
             }
         };
         fetchCentrosNomina();
-    }, [selectedContrato]); // Se re-ejecuta cada vez que el contrato cambia
+    }, [selectedContrato]); 
 
     return ( 
         <div style={{ padding: '20px', maxWidth: '1200px', margin: 'auto' }}>
@@ -244,6 +240,16 @@ function Nomina() {
                 <div className="grafico-container">
                     <h2>Reporte novedades</h2>
                     <GraficoNovedades
+                        centroId={selectedCentroNomina} // Usamos el ID del Centro de Nómina
+                        ano={selectedAno}
+                        mesInicio={selectedMesInicio}
+                        mesFin={selectedMesFin}
+                    />
+                </div>
+
+                <div className="grafico-container">
+                    <h2>Porcentaje novedades</h2>
+                    <GraficoTortaNovedades
                         centroId={selectedCentroNomina} // Usamos el ID del Centro de Nómina
                         ano={selectedAno}
                         mesInicio={selectedMesInicio}

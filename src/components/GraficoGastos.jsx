@@ -27,16 +27,14 @@ ChartJS.register(
 
 // Colores consistentes para cada tipo de gasto.
 const GASTO_COLORS = {
-    nomina: { color: 'rgb(255, 99, 132)', alpha: 'rgba(255, 99, 132, 0.8)' },
     aux_transporte: { color: 'rgb(54, 162, 235)', alpha: 'rgba(54, 162, 235, 0.8)' },
-    prestaciones: { color: 'rgb(255, 205, 86)', alpha: 'rgba(255, 205, 86, 0.8)' },
+    prestaciones: { color: 'rgb(255, 99, 132)', alpha: 'rgba(255, 99, 132, 0.8)'  },
     gastos_fijos: { color: 'rgb(75, 192, 192)', alpha: 'rgba(75, 192, 192, 0.8)' },
     gastos_variable: { color: 'rgb(153, 102, 255)', alpha: 'rgba(153, 102, 255, 0.8)' },
+    nomina: { color: 'rgb(255, 159, 64)', alpha: 'rgba(255, 159, 64, 0.8)' },
 };
-
 /**
  * Función que formatea números grandes para mostrar el prefijo K, M, o G.
- * Ejemplo: 192494889 -> "$ 192.5 M"
  */
 const formatLargeNumber = (value) => {
     const absValue = Math.abs(value);
@@ -80,9 +78,38 @@ const options = {
                 }
             }
         },
-        // CORRECCIÓN CLAVE: Deshabilitar el datalabel para este gráfico
+        // CONFIGURACIÓN DEL DATALABELS para mostrar Abreviatura
         datalabels: {
-            display: false
+            align: 'center', 
+            anchor: 'center',
+            offset: 0, 
+            formatter: (value, context) => {
+                const label = context.dataset.label; // Ej: 'Nómina', 'Gastos Fijos'
+                
+                // Mapeo específico para Gastos Fijos y Gastos Variables
+                let abbreviation;
+                if (label.includes('Gastos Fijos')) {
+                    abbreviation = 'FIJ';
+                } else if (label.includes('Gastos Variables')) {
+                    abbreviation = 'VAR';
+                } else {
+                    // Para otros gastos (Nómina, Aux. Transporte, Prestaciones)
+                    abbreviation = label.substring(0, 3).toUpperCase();
+                }
+
+                // Mostramos la abreviatura si el valor es mayor a 0
+                if (value > 0) {
+                    return abbreviation; 
+                }
+                return null;
+            },
+            color: 'black', 
+            font: {
+                weight: 'bold',
+                size: 10,
+            },
+            // Mantenemos display: true, y dejamos que el formatter maneje el 'null'
+            display: true 
         }
     },
     layout: {

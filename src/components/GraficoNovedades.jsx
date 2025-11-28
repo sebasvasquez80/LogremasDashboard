@@ -81,8 +81,15 @@ const options = {
             align: 'center', 
             anchor: 'center',
             offset: 0, 
-            formatter: (value) => {
-                return formatLargeNumber(value);
+            formatter: (value, context) => {
+                // CORRECCIÓN CLAVE: Mostrar la abreviatura del nombre
+                const label = context.dataset.label; // Ej: 'Recargo'
+                
+                // Aseguramos que solo mostramos la abreviatura si el valor es > 0
+                if (value > 0) {
+                    return label.substring(0, 3).toUpperCase(); // 'Rec', 'Ext', etc.
+                }
+                return null; // No mostrar nada si el valor es cero
             },
             color: 'black', 
             font: {
@@ -90,7 +97,8 @@ const options = {
                 size: 10,
             },
             display: (context) => {
-                return context.dataset.data[context.dataIndex] > 10000; 
+                // Deshabilitamos el display por umbral, confiando en el formatter
+                return true; 
             }
         }
     },
